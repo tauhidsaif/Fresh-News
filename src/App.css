@@ -69,3 +69,8 @@
     height: 56px;
     color: black;
   }
+
+  .navbar-dark .navbar-nav .nav-link.active, .navbar-dark .navbar-nav .show>.nav-link {
+    text-align: center;
+    font-weight: bold;
+}
