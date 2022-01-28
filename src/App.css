@@ -37,6 +37,9 @@
   }
 }
 
+.card{
+  width: 20rem;
+}
 .card-img-top {
   width: 286px;
   height: 195px;}

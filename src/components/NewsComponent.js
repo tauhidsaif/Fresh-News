@@ -3,6 +3,8 @@ import NewsItems from './NewsItems';
 import Spinner from './Spinner';
 import PropTypes from 'prop-types';
 import InfiniteScroll from "react-infinite-scroll-component";
+import ScrollToTop from "react-scroll-to-top";
+
 
 
 
@@ -56,8 +58,8 @@ export class NewsComponent extends Component {
 
     // }
 
-    fetchMoreData = async () =>{
-        this.setState({page: this.state.page + 1})
+    fetchMoreData = async () => {
+        this.setState({ page: this.state.page + 1 })
         let url = `https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}&category=${this.props.category}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`
         let data = await fetch(url);
         let parsedData = await data.json();
@@ -75,26 +77,35 @@ export class NewsComponent extends Component {
             articles: [],
             loading: false,
             page: 1,
-            totalResults : 0
+            totalResults: 0
         }
         document.title = `${this.capitilizeFunc(this.props.category)} - FreshNews`;
     }
 
     async componentDidMount() {
+        this.props.setProgress(10);
         let url = `https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}&category=${this.props.category}&page=1&category=${this.props.category}&apiKey=${this.props.apiKey}&page=1&pageSize=${this.props.pageSize}`
         this.setState({ loading: true })
         let data = await fetch(url);
+        this.props.setProgress(30);
         let parsedData = await data.json();
+        this.props.setProgress(50);
         console.log(parsedData);
+        this.props.setProgress(70);
         this.setState({
             articles: parsedData.articles,
             totalResults: parsedData.totalResults,
             loading: false
         })
+        this.props.setProgress(100);
+
     }
 
     render() {
         return <div>
+            <div className="App">
+                <ScrollToTop smooth component={<p style={{ color: "black", fontWeight : "bold" }}>UP</p>} />
+            </div>
             <h2 className="my-4 text-center">FreshNews - India Top Headlines</h2>
             <h5 className="text-center">Created by Tohid</h5>
             {this.state.loading && <Spinner />}
@@ -102,20 +113,21 @@ export class NewsComponent extends Component {
                 dataLength={this.state.articles.length}
                 next={this.fetchMoreData}
                 hasMore={this.state.articles.length !== this.state.totalResults}
-                loader={<Spinner/>}
+                loader={<Spinner />}
             >
-               <div className="container">
+                <div className="container">
 
-                <div className="row d-flex ">
-                    {this.state.articles.map((element) => {
-                        
-                        return <div className="col-md-4 my-3 d-flex justify-content-center" key={element.url}>
-                            <NewsItems title={element.title} description={element.description ? element.description.slice(0, 120) : element.title.slice(0, 120)} imageUrl={element.urlToImage ? element.urlToImage : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSADPzrYm_hQg2XMNc_9KTr9Axmn35s0DbsIQ&usqp=CAU"} newsUrl={element.url}
-                                author={element.author} date={element.publishedAt} name={element.source.name} />
-                        </div>
-                    })}
+                    <div className="row d-flex ">
+                        {this.state.articles.map((element) => {
+
+                            return <div className="col-md-4 my-3 d-flex justify-content-center" key={element.url}>
+                                <NewsItems title={element.title} description={element.description ? element.description.slice(0, 120) : element.title.slice(0, 120)} imageUrl={element.urlToImage ? element.urlToImage : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSADPzrYm_hQg2XMNc_9KTr9Axmn35s0DbsIQ&usqp=CAU"} newsUrl={element.url}
+                                    author={element.author} date={element.publishedAt} name={element.source.name} />
+                            </div>
+                        })}
 
                     </div>
+
 
                 </div>
             </InfiniteScroll>

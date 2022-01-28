@@ -9,7 +9,7 @@ export class NewsItems extends Component {
         let { title, description, imageUrl, newsUrl, author, date, name } = this.props;
         return <div>
             <div className="card" style={{ width: "18rem" }}>
-                <img className="card-img-top" src={imageUrl} alt="Card image cap" />
+                <img className="card-img-top" src={imageUrl} alt="Card  cap" />
                 <div className="card-body">
                     <button type="button"  className=" myBadge btn my-3 btn-light border border-primary">
                         {name}
